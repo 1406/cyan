@@ -1,0 +1,50 @@
+
+funccall ::= funcname arglist
+funcdef ::= function funcname arglist dostat
+arglist ::= '(' [paramlist] ')'
+
+
+
+####################################
+
+# 不管函数体还是循环体还是普通代码块, 都用do..end结构包围
+# 不管是否循环体, 都可以用break跳出代码块
+function xxxxx(a, b, c)
+do
+    expr;
+    do
+        expr
+        expr
+        expr
+        if a == b then
+            break;
+        end
+        expr
+    end
+    expr
+end
+
+function yyyy(a, b=3) do
+    expr
+    expr
+except
+    expr
+finally
+    expr
+end
+
+for i in iter
+do
+    expr
+    expr
+    if i == 3 then
+        break
+    elif i == 5 then
+        expr
+        break
+    else
+        continue
+    endif
+except
+    expr
+end
