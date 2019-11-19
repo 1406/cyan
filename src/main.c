@@ -5,6 +5,7 @@
 #include <stdlib.h>
 
 #include "statement.h"
+#include "parser.h"
 #include "lexer.h"
 
 static int showversion() {
@@ -67,6 +68,7 @@ chunkstate_t *parser(FILE *stream, const char *prompt) {
     chunkstate_t *ast = (chunkstate_t *)malloc(sizeof(chunkstate_t));
     char *buffer = (char *)malloc(LINELEN);
     char *line = NULL;
+    token_t *curr_token;
     for (int linenum = 1;; linenum++) {
         line = readline(stream, buffer, prompt);
         if (line == NULL) {
@@ -75,7 +77,20 @@ chunkstate_t *parser(FILE *stream, const char *prompt) {
         }
         printf("read len %lu, read word %s\n", strlen(line), line);
         ast->currentline = linenum;
-        read_token(ast, line);
+        curr_token = read_token(&line);
+        printf("current token type %d\n", curr_token->token);
+        if (curr_token->token == TK_COMMENT) {
+            printf("comment is %s\n", curr_token->s);
+        } else if (curr_token->token == TK_INTEGER) {
+            printf("number is %ld\n", curr_token->i);
+        } else if (curr_token->token == TK_FLOAT) {
+            printf("number is %f\n", curr_token->f);
+        } else if (curr_token->token == TK_STRING) {
+            printf("string is %s\n", curr_token->s);
+        } else {
+            printf("----------------\n");
+        }
+        // statement()
     }
     free(buffer);
     return ast;

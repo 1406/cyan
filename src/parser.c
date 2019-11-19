@@ -1,6 +1,6 @@
 #include "lexer.h"
 
-static void statement(statement_t *stmt) {
+void statement(statement_t *stmt) {
     switch (stmt->tkn.token) {
     case TK_FUNCTION:
         funcstat(stmt);

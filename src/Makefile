@@ -1,7 +1,7 @@
 CC=gcc
-CFLAGS=-Wall -O2
-TARGET=cyan
-OBJECT=main.o
+CFLAGS=-Wall -O2 -g
+TARGET=cyan.elf
+OBJECT=main.o lexer.o
 
 .PHONY: all
 all: $(TARGET)

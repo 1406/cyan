@@ -1,3 +1,5 @@
+#ifndef __STRING_H__
+#define __STRING_H__
 
 typedef enum {
     CODE_BYTE,
@@ -5,10 +7,11 @@ typedef enum {
     CODE_ANSI,
     CODE_UTF8,
     CODE_UTF16,
-} code_e;
+} codec_type_t;
 
 typedef struct {
-    code_e code;
+    codec_type_t code;
     char *data;
 } str_t;
 
+#endif  /* __STRING_H__ */

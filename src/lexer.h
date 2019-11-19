@@ -1,3 +1,5 @@
+#ifndef __LEXER_H__
+#define __LEXER_H__
 
 typedef enum {
     TK_IF,
@@ -13,11 +15,14 @@ typedef enum {
     TK_INTEGER,
     TK_FLOAT,
     TK_STRING,
+    TK_NUMBER,
     TK_NAME,
-} token_e;
+    TK_NEWLINE,
+    TK_COMMENT,
+} token_type_t;
 
 typedef struct {
-    token_e token;
+    token_type_t token;
     union {
         long i;
         double f;
@@ -29,3 +34,7 @@ typedef struct {
     token_t tkn;
 } statement_t;
 
+
+token_t *read_token(const char **buff);
+
+#endif  /* __LEXER_H__ */

@@ -93,6 +93,7 @@ token_t *read_number(char **strbuf) {
             break;
         }
     }
+    *strbuf = str;
     assert(*str == '\0' || isspace(*str) || (ispunct(*str) && *str != '_'));
     return result;
 }
@@ -101,11 +102,13 @@ token_t *read_string(char **strbuf) {
     char *str = *strbuf;
     char *start = str;
     assert(*start == '\'' || *start == '"');
+    str++;
     while (*str) {
         if (*str == '\\') {
             str += 2;
         }
         if (*str == *start) {
+            *strbuf = str;
             break;
         }
         str++;
@@ -127,10 +130,11 @@ token_t *read_identifier(char **strbuf) {
         if (isalpha(*str) || isalnum(*str) || *str == '_') {
             str++;
         } else {
+            *strbuf = str;
             break;
         }
     }
-    
+
     token_t *result = (token_t *)malloc(sizeof (token_t));
     assert(result != NULL);
     int length = str - start;
@@ -139,7 +143,7 @@ token_t *read_identifier(char **strbuf) {
     result->s[length] = '\0';
 
     // 此处需要判断是否关键字, 然后为token赋值
-    // FIXME: 先用简单粗暴的方法判断, 以后再看有没有好的算法, 这里就需要token_e和reserved序号一致
+    // FIXME: 先用简单粗暴的方法判断, 以后再看有没有好的算法, 这里就需要token_type_t和reserved序号一致
     for (int i = 0; i < 23; i++) {
         if (!strcmp(result->s, reserved[i])) {
             result->token = i;
@@ -150,24 +154,65 @@ token_t *read_identifier(char **strbuf) {
     return result;
 }
 
-char *read_comment() {
+token_t *read_comment(char **strbuf) {
+    char *str = *strbuf;
+    char *start = str;
+    while (*str) {
+        if (*str != '\r' && *str != '\n') {
+            str++;
+        } else {
+            *strbuf = str;
+            break;
+        }
+    }
 
+    token_t *result = (token_t *)malloc(sizeof (token_t));
+    assert(result != NULL);
+    result->token = TK_COMMENT;
+
+    int length = str - start;
+    result->s = (char *)malloc(length + 1);
+    memcpy(result->s, start, length);
+    result->s[length] = '\0';
+    return result;
 }
 
-token_e read_token(const char *buff) {
-    switch (*buff) {
+void skip_space(char **strbuf) {
+    char *str = *strbuf;
+    char *start = str;
+    while (*str) {
+        if (isspace(*str)) {
+            printf("str is space -%c-, addr is %p", *str, str);
+            str++;
+        } else {
+            *strbuf = str;
+            break;
+        }
+    }
+}
+
+token_t *read_token(const char **buff) {
+    char *str = *buff;
+    char *start = str;
+    switch (*str) {
     case '\r':
     case '\n':
-        increasenum();
+        /* newline */
+        str++;
+        token_t *result = (token_t *)malloc(sizeof (token_t));
+        assert(result != NULL);
+        result->token = TK_NEWLINE;
+        return result;
     case ' ':
     case '\t':
     case '\v':
     case '\f':
         /* space */
-        return read_token(buff++);
+        skip_space(buff);
+        return read_token(buff);
     case '#':
         /* comment */
-        return read_comment();
+        return read_comment(buff);
     case ';':
         /* split expr */
         break;
@@ -208,19 +253,18 @@ token_e read_token(const char *buff) {
         /* . */
         break;
     case '\'':
-        /* string unformatable */
-        break;
     case '"':
         /* string */
-        break;
+        return read_string(buff);
     case '0' ... '9':
         /* number */
-        break;
+        return read_number(buff);
     default:
         /* label */
-        break;
+        return read_identifier(buff);
     }
+    return NULL;
 }
 
-token_e lexer(chunkstate_t *ast, const char *buff) {
-}
+// token_t lexer(chunkstate_t *ast, const char *buff) {
+// }

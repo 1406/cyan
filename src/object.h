@@ -1,3 +1,5 @@
+#ifndef __OBJECT_H__
+#define __OBJECT_H__
 
 typedef enum {
     T_NIL,
@@ -14,3 +16,5 @@ typedef struct {
     type_t type;
     char *name;
 } object;
+
+#endif  /*  __NUMBER_H__ */
