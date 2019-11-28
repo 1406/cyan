@@ -90,7 +90,16 @@ chunkstate_t *parser(FILE *stream, const char *prompt) {
         } else {
             printf("----------------\n");
         }
-        // statement()
+        // curr_block 可能是一个没完成的语法, 因此每次都从这里开始
+        switch (curr_token->token) {
+        case TK_DO:
+            /* code */
+            break;
+
+        default:
+            break;
+        }
+        ast->curr_block->next = statement(curr_token, &line);
     }
     free(buffer);
     return ast;

@@ -11,6 +11,10 @@ $(TARGET): $(OBJECT)
 %.o: %.c
 	$(CC) $(CFLAGS) -o $@ -c $<
 
+.PHONY: install
+install: $(TARGET)
+	cp $(TARGET) /usr/bin/cyan
+
 .PHONY: clean
 clean:
 	rm -f $(TARGET) $(OBJECT)

@@ -1,30 +1,31 @@
 #include "lexer.h"
+#include "statement.h"
 
-void statement(statement_t *stmt) {
-    switch (stmt->tkn.token) {
+blockstate_t *statement(token_t *token, const char **buff) {
+    switch (token->token) {
     case TK_FUNCTION:
-        funcstat(stmt);
+        funcstat(buff);
         break;
     case TK_RETURN:
-        returnstat(stmt);
+        returnstat(buff);
         break;
     case TK_DO:
-        dostat(stmt);
+        dostat(buff);
         break;
     case TK_WHILE:
-        whilestat(stmt);
+        whilestat(buff);
         break;
     case TK_FOR:
-        forstat(stmt);
+        forstat(buff);
         break;
     case TK_BREAK:
-        breakstat(stmt);
+        breakstat(buff);
         break;
     case TK_IF:
-        ifstat(stmt);
+        ifstat(buff);
         break;
     default:
-        exprstat(stmt);
+        exprstat(buff);
         break;
     }
 }

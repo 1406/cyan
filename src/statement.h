@@ -42,7 +42,9 @@ typedef struct {
 } unaryexpressionstate_t;
 
 typedef struct {
-    blockstate_t block;
+    blockstate_t doblock;
+    blockstate_t expectblock;
+    blockstate_t finallyblock;
 } dostate_t;
 
 
@@ -71,11 +73,12 @@ typedef struct {
 } forstate_t;
 
 typedef struct {
-
+    dostate_t body;
 } functionstate_t;
 
 typedef struct {
-    blockstate_t block;
+    blockstate_t *head_block;
+    blockstate_t *curr_block;
     int currentline;
     // token_t currenttoken;
     const char *currentpointer;

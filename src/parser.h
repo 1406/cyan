@@ -12,6 +12,6 @@ typedef struct {
 
 
 chunkstate_t *parser(FILE *stream, const char *prompt);
-void statement(statement_t *stmt);
+blockstate_t *statement(token_t *token, const char **buff);
 
 #endif  /* __PARSER_H__ */
