@@ -1,20 +1,22 @@
-#ifndef __OBJECT_H__
-#define __OBJECT_H__
+#ifndef __CYAN_OBJECT_H__
+#define __CYAN_OBJECT_H__
 
 typedef enum {
-    T_NIL,
-    T_STRING,
-    T_NUMBER,
-    T_FUNCTION,
-    T_DATA,
-    T_LIST,
-    T_DICT,
-    T_THREAD,
-} type_t;
+    OBJ_NIL,
+    OBJ_STRING,
+    OBJ_NUMBER,
+    OBJ_FUNCTION,
+    OBJ_DATA,
+    OBJ_LIST,
+    OBJ_DICT,
+    OBJ_THREAD,
+} obj_t;
 
-typedef struct {
-    type_t type;
+typedef struct object {
+    obj_t type;
     char *name;
-} object;
+    void *substance;
+    unsigned int count;
+};
 
-#endif  /*  __NUMBER_H__ */
+#endif  /* __CYAN_NUMBER_H__ */

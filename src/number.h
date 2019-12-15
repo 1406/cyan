@@ -1,17 +1,18 @@
-#ifndef __NUMBER_H__
-#define __NUMBER_H__
+#ifndef __CYAN_NUMBER_H__
+#define __CYAN_NUMBER_H__
 
 typedef enum {
-    NUM_INT,
+    NUM_INTEGER,
     NUM_DOUBLE,
-} num_type_t;
+    NUM_NAN,
+} num_t;
 
-typedef struct {
-    num_type_t n;
+struct number {
+    num_t t;
     union {
         long i;
         double d;
     };
-} num_t;
+};
 
-#endif  /* __NUMBER_H__ */
+#endif  /* __CYAN_NUMBER_H__ */

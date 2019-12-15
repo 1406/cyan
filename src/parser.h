@@ -1,17 +1,8 @@
-#ifndef __PARSER_H__
-#define __PARSER_H__
-
-typedef struct {
-
-} block;
+#ifndef __CYAN_PARSER_H__
+#define __CYAN_PARSER_H__
 
 
-typedef struct {
-    block blk;
-} chunk;
+struct chunk *parser(FILE *stream, const char *prompt);
+struct block *statement(struct token *tk, const char **buff);
 
-
-chunkstate_t *parser(FILE *stream, const char *prompt);
-blockstate_t *statement(token_t *token, const char **buff);
-
-#endif  /* __PARSER_H__ */
+#endif  /* __CYAN_PARSER_H__ */

@@ -1,5 +1,5 @@
-#ifndef __OPCDOE_H__
-#define __OPCODE_H__
+#ifndef __CYAN_OPCDOE_H__
+#define __CYAN_OPCODE_H__
 
 typedef enum {
     OP_ADD,
@@ -17,6 +17,6 @@ typedef enum {
 
     OP_CALL,
     OP_RETURN,
-} opcode;
+} opcode_t;
 
-#endif  /* __OPCODE_H__ */
+#endif  /* __CYAN_OPCODE_H__ */

@@ -2,6 +2,6 @@
 
 #include "thread.h"
 
-bool thrd2bool(thrd_t *thrd) {
+bool thrd2bool(struct thread *thrd) {
 
 }

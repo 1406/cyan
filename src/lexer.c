@@ -31,12 +31,12 @@ static const char * const reserved[] = {
  * [0-9]+(.[0-9]+)?[Ee][+-]?[0-9]+  科学记数法浮点数, e小写, E大写
  * 首位仅能数字开头, 其中0开头的后仅能跟进制符号和小数点以及八进制数或空白
 **/
-token_t *read_number(char **strbuf) {
+struct token *read_number(char **strbuf) {
     char *str = *strbuf;
 
-    token_t *result = (token_t *)malloc(sizeof (token_t));
+    struct token *result = malloc(sizeof(struct token));
     assert(result != NULL);
-    result->token = TK_INTEGER;
+    result->t = TK_INTEGER;
 
     // 先读首二位, 这两位信息量很大, 很有可能就此确定该怎么读, 如果非10进制, 这里就能确定了, 10进制的情况如果读到了小数点, 也能确定就读浮点数了
     if (*str == '0') {
@@ -45,7 +45,7 @@ token_t *read_number(char **strbuf) {
         case '.':
             // 浮点数, 还需检查下一位, 点后必须是数字, 但strtod可以小数点开头
             assert(isdigit(*(str + 1)));
-            result->token = TK_FLOAT;
+            result->t = TK_FLOAT;
             result->f = strtod(str, &str);
             break;
         case 'X':
@@ -85,7 +85,7 @@ token_t *read_number(char **strbuf) {
             assert(*(next + 1) == '-' || *(next + 1) == '+' || isdigit(*(next + 1)));
         case '.':
             assert(isdigit(*(next + 1)));
-            result->token = TK_FLOAT;
+            result->t = TK_FLOAT;
             result->f = strtod(str, &str);
             break;
         default:
@@ -98,7 +98,7 @@ token_t *read_number(char **strbuf) {
     return result;
 }
 
-token_t *read_string(char **strbuf) {
+struct token *read_string(char **strbuf) {
     char *str = *strbuf;
     char *start = str;
     assert(*start == '\'' || *start == '"');
@@ -113,17 +113,17 @@ token_t *read_string(char **strbuf) {
         }
         str++;
     }
-    token_t *result = (token_t *)malloc(sizeof (token_t));
+    struct token *result = malloc(sizeof(struct token));
     assert(result != NULL);
     int length = str - start;
-    result->s = (char *)malloc(length + 1);
+    result->s = malloc(length + 1);
     memcpy(result->s, start, length);
     result->s[length] = '\0';
-    result->token = TK_STRING;
+    result->t = TK_STRING;
     return result;
 }
 
-token_t *read_identifier(char **strbuf) {
+struct token *read_identifier(char **strbuf) {
     char *str = *strbuf;
     char *start = str;
     while (*str) {
@@ -135,10 +135,10 @@ token_t *read_identifier(char **strbuf) {
         }
     }
 
-    token_t *result = (token_t *)malloc(sizeof (token_t));
+    struct token *result = malloc(sizeof(struct token));
     assert(result != NULL);
     int length = str - start;
-    result->s = (char *)malloc(length + 1);
+    result->s = malloc(length + 1);
     memcpy(result->s, start, length);
     result->s[length] = '\0';
 
@@ -146,15 +146,15 @@ token_t *read_identifier(char **strbuf) {
     // FIXME: 先用简单粗暴的方法判断, 以后再看有没有好的算法, 这里就需要token_type_t和reserved序号一致
     for (int i = 0; i < 23; i++) {
         if (!strcmp(result->s, reserved[i])) {
-            result->token = i;
+            result->t = i;
             return result;
         }
     }
-    result->token = TK_NAME;
+    result->t = TK_NAME;
     return result;
 }
 
-token_t *read_comment(char **strbuf) {
+struct token *read_comment(char **strbuf) {
     char *str = *strbuf;
     char *start = str;
     while (*str) {
@@ -166,12 +166,12 @@ token_t *read_comment(char **strbuf) {
         }
     }
 
-    token_t *result = (token_t *)malloc(sizeof (token_t));
+    struct token *result = malloc(sizeof(struct token));
     assert(result != NULL);
-    result->token = TK_COMMENT;
+    result->t = TK_COMMENT;
 
     int length = str - start;
-    result->s = (char *)malloc(length + 1);
+    result->s = malloc(length + 1);
     memcpy(result->s, start, length);
     result->s[length] = '\0';
     return result;
@@ -191,7 +191,7 @@ void skip_space(char **strbuf) {
     }
 }
 
-token_t *read_token(const char **buff) {
+struct token *read_token(const char **buff) {
     char *str = *buff;
     char *start = str;
     switch (*str) {
@@ -199,9 +199,9 @@ token_t *read_token(const char **buff) {
     case '\n':
         /* newline */
         str++;
-        token_t *result = (token_t *)malloc(sizeof (token_t));
+        struct token *result = malloc(sizeof(struct token));
         assert(result != NULL);
-        result->token = TK_NEWLINE;
+        result->t = TK_NEWLINE;
         return result;
     case ' ':
     case '\t':
@@ -265,6 +265,3 @@ token_t *read_token(const char **buff) {
     }
     return NULL;
 }
-
-// token_t lexer(chunkstate_t *ast, const char *buff) {
-// }

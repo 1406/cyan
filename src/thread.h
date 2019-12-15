@@ -1,8 +1,8 @@
-#ifndef __THREAD_H__
-#define __THREAD_H__
+#ifndef __CYAN_THREAD_H__
+#define __CYAN_THREAD_H__
 
-typedef struct {
+struct thread {
 
-} thrd_t;
+};
 
-#endif  /* __THREAD_H__ */
+#endif  /* __CYAN_THREAD_H__ */

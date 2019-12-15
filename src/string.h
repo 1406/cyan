@@ -1,5 +1,5 @@
-#ifndef __STRING_H__
-#define __STRING_H__
+#ifndef __CYAN_STRING_H__
+#define __CYAN_STRING_H__
 
 typedef enum {
     CODE_BYTE,
@@ -7,11 +7,11 @@ typedef enum {
     CODE_ANSI,
     CODE_UTF8,
     CODE_UTF16,
-} codec_type_t;
-
-typedef struct {
-    codec_type_t code;
-    char *data;
 } str_t;
 
-#endif  /* __STRING_H__ */
+struct string {
+    str_t t;
+    char *s;
+};
+
+#endif  /* __CYAN_STRING_H__ */

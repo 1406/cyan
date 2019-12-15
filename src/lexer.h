@@ -1,5 +1,5 @@
-#ifndef __LEXER_H__
-#define __LEXER_H__
+#ifndef __CYAN_LEXER_H__
+#define __CYAN_LEXER_H__
 
 typedef enum {
     TK_IF, TK_THEN, TK_ELIF, TK_ELSE, TK_ENDIF,
@@ -13,22 +13,18 @@ typedef enum {
     TK_NEWLINE,
     TK_COMMENT,
     TK_EQ, TK_NE, TK_GT, TK_TE, TK_LT, TK_LE,
-} token_type_t;
+} token_t;
 
-typedef struct {
-    token_type_t token;
+struct token {
+    token_t t;
     union {
         long i;
         double f;
         char *s;
     };
-} token_t;
-
-typedef struct {
-    token_t tkn;
-} statement_t;
+};
 
 
-token_t *read_token(const char **buff);
+struct token *read_token(const char **buff);
 
-#endif  /* __LEXER_H__ */
+#endif  /* __CYAN_LEXER_H__ */

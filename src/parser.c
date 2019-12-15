@@ -1,8 +1,8 @@
 #include "lexer.h"
 #include "statement.h"
 
-blockstate_t *statement(token_t *token, const char **buff) {
-    switch (token->token) {
+struct block *statement(struct token *tk, const char **buff) {
+    switch (tk->t) {
     case TK_FUNCTION:
         funcstat(buff);
         break;

@@ -1,10 +1,10 @@
-#ifndef __STATEMENT_H__
-#define __STATEMENT_H__
+#ifndef __CYAN_STATEMENT_H__
+#define __CYAN_STATEMENT_H__
 
 
 
 #include "lexer.h"
-
+#include "opcode.h"
 
 
 
@@ -19,70 +19,70 @@
 
 
 /* 代码块, 最基本的语法数结构, 以此组织整个脚本语法结构, 其他语法均依赖这个结构 */
-typedef struct blockstate {
-    token_t *token;
+struct block {
     int linenumber;
+    struct token *tk;
     void *stmt;
-    struct blockstate *next;
-} blockstate_t;
+    struct block *next;
+};
 
-typedef struct {
-    blockstate_t block;
-} expressionstate_t;
+struct expression_stmt {
+    struct block block;
+};
 
-typedef struct {
-    token_t *token;
-    expressionstate_t left;
-    expressionstate_t right;
-} binaryexpressionstate_t;
+struct binary_expr_stmt {
+    opcode_t op;
+    struct expression_stmt left;
+    struct expression_stmt right;
+};
 
-typedef struct {
-    token_t *token;
-    expressionstate_t expr;
-} unaryexpressionstate_t;
+struct unary_expr_stmt {
+    opcode_t op;
+    struct expression_stmt expr;
+};
 
-typedef struct {
-    blockstate_t doblock;
-    blockstate_t expectblock;
-    blockstate_t finallyblock;
-} dostate_t;
+struct do_stmt {
+    struct block doblock;
+    struct block expectblock;
+    struct block finallyblock;
+};
 
+/* if statement is also elif statement */
+struct if_stmt {
+    struct expression_stmt expr;
+    struct block truebranch;
+    struct block falsebranch;
+};
 
-typedef struct {
-    expressionstate_t expr;
-    blockstate_t truebranch;
-    blockstate_t falsebranch;
-} ifstate_t, elifstate_t;
+struct else_stmt {
+    struct block elseblock;
+};
 
-typedef struct {
-    blockstate_t elseblock;
-} elsestate_t;
+struct while_stmt {
+    struct expression_stmt expr;
+    struct do_stmt doblock;
+};
 
-typedef struct {
-    expressionstate_t expr;
-    dostate_t doblock;
-} whilestate_t;
+struct iterator_stmt {
 
-typedef struct {
+};
 
-} iteratorstate_t;
+struct for_stmt {
+    struct iterator_stmt iter;
+    struct do_stmt doblock;
+};
 
-typedef struct {
-    iteratorstate_t iter;
-    dostate_t doblock;
-} forstate_t;
+struct function_stmt {
+    struct do_stmt body;
+};
 
-typedef struct {
-    dostate_t body;
-} functionstate_t;
-
-typedef struct {
-    blockstate_t *head_block;
-    blockstate_t *curr_block;
+struct chunk {
+    struct block *head_block;
+    struct block *curr_block;
     int currentline;
-    // token_t currenttoken;
+    // struct token currenttoken;
     const char *currentpointer;
     const char *chunkname;  // 包名称, 用于import时排重
-} chunkstate_t;
+};
 
-#endif  /* __STATEMENT_H__ */
+#endif  /* __CYAN_STATEMENT_H__ */
