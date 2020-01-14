@@ -1,7 +1,8 @@
-CC=gcc
-CFLAGS=-Wall -O2 -g
-TARGET=cyan.elf
-OBJECT=main.o lexer.o
+CC := gcc
+CFLAGS := -Wall -O2 -g
+TARGET := cyan.elf
+SOURCE := $(wildcard *.c)
+OBJECT := $(SOURCE:.c=.o)
 
 .PHONY: all
 all: $(TARGET)
@@ -13,8 +14,8 @@ $(TARGET): $(OBJECT)
 
 .PHONY: install
 install: $(TARGET)
-	cp $(TARGET) /usr/bin/cyan
+	cp $(TARGET) /usr/local/bin/cyan
 
 .PHONY: clean
 clean:
-	rm -f $(TARGET) $(OBJECT)
+	-rm -f $(TARGET) $(OBJECT)
