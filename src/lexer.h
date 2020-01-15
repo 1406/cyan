@@ -1,7 +1,7 @@
 #ifndef __CYAN_LEXER_H__
 #define __CYAN_LEXER_H__
 
-typedef enum {
+enum TOKEN_TYPE {
     TK_IF, TK_THEN, TK_ELIF, TK_ELSE, TK_ENDIF,
     TK_FOR, TK_IN, TK_WHILE, TK_CONTINUE,
     TK_FUNCTION, TK_RETURN,
@@ -13,10 +13,10 @@ typedef enum {
     TK_NEWLINE,
     TK_COMMENT,
     TK_EQ, TK_NE, TK_GT, TK_TE, TK_LT, TK_LE,
-} token_t;
+};
 
 struct token {
-    token_t t;
+    enum TOKEN_TYPE t;
     union {
         long i;
         double f;

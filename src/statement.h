@@ -1,7 +1,7 @@
 #ifndef __CYAN_STATEMENT_H__
 #define __CYAN_STATEMENT_H__
 
-
+#include <stdio.h>
 
 #include "lexer.h"
 #include "opcode.h"
@@ -10,7 +10,10 @@
 
 
 
-
+enum CHUNK_STATUS {
+    CS_DONE,
+    CS_NEWLINE,
+};
 
 
 
@@ -31,13 +34,13 @@ struct expression_stmt {
 };
 
 struct binary_expr_stmt {
-    opcode_t op;
+    enum OP_CODE op;
     struct expression_stmt left;
     struct expression_stmt right;
 };
 
 struct unary_expr_stmt {
-    opcode_t op;
+    enum OP_CODE op;
     struct expression_stmt expr;
 };
 
@@ -76,11 +79,17 @@ struct function_stmt {
     struct do_stmt body;
 };
 
+/* chunk 是语法树的根节点 */
 struct chunk {
+    FILE *stream;
+    char *prompt;
+    char *buffer;
+    struct token *curr_token;
     struct block *head_block;
     struct block *curr_block;
-    int currentline;
-    // struct token currenttoken;
+    int curr_line;          // 遇到换行符行号才加一, 如果是用反斜杠换行, 行号不变
+    int curr_column;        // 遇到换行符这个置为0
+    enum CHUNK_STATUS status;
     const char *currentpointer;
     const char *chunkname;  // 包名称, 用于import时排重
 };

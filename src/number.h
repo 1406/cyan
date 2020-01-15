@@ -1,14 +1,14 @@
 #ifndef __CYAN_NUMBER_H__
 #define __CYAN_NUMBER_H__
 
-typedef enum {
+enum NUM_TYPE {
     NUM_INTEGER,
     NUM_DOUBLE,
     NUM_NAN,
-} num_t;
+};
 
 struct number {
-    num_t t;
+    enum NUM_TYPE t;
     union {
         long i;
         double d;
